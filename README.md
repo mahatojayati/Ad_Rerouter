@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 # Ad_rerouter
-=======
-# Ad Rerouter
+
+
 
 **Ad Rerouter** is a lightweight Chrome extension designed to reduce the visual and audio disruption caused by YouTube advertisements.
 
