@@ -2,6 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
+// Content script build: outputs a single self-contained IIFE file.
+// Chrome injects content_scripts as classic (non-module) scripts, so
+// ES module syntax (import/export) is not allowed.  Using "iife" format
+// and inlineDynamicImports ensures everything is bundled into one file
+// with no import statements.
 export default defineConfig({
   plugins: [
     react()
@@ -11,17 +16,12 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        popup: resolve(__dirname, 'popup.html'),
         content: resolve(__dirname, 'src/content/content.js')
       },
       output: {
-        entryFileNames: (chunkInfo) => {
-          if (chunkInfo.name === 'content') {
-            return 'content.js';
-          }
-          return 'assets/[name]-[hash].js';
-        },
-        chunkFileNames: 'assets/[name]-[hash].js',
+        format: 'iife',
+        entryFileNames: 'content.js',
+        inlineDynamicImports: true,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'content.css' || assetInfo.name === 'overlay.css') {
             return 'overlay.css';
